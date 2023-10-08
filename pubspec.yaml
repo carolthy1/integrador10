@@ -12,6 +12,7 @@ dependencies:
   sqflite: ^2.3.0
   intl: ^0.18.1
   flutter_localization: ^0.1.14
+  google_fonts: ^6.1.0
 
 dev_dependencies:
   flutter_test:

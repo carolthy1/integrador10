@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
           final task = _tasks[index];
           return GestureDetector(
             onTap: () {
-              task.showDetails(context); // Corrigir a chamada do método para task.showDetails
+              task.showDetails(context);
             },
             child: Card(
               elevation: 2,

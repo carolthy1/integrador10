@@ -6,23 +6,32 @@ import 'home_screen.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  final Color myColor = Color(0xFFDBCDFF);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Study Wave',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      theme: ThemeData.light().copyWith(
+        appBarTheme: AppBarTheme(
+          toolbarHeight: 70.0, // Defina a altura da faixa da AppBar aqui
+          elevation: 4, // Ajuste a elevação da AppBar aqui
+          centerTitle: true, // Centralize o título
+        ),
+        colorScheme: ColorScheme.light(
+          primary: myColor,
+          secondary: myColor,
+        ),
       ),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
-        // Adicione um delegate específico para pt_BR
         const FallbackCupertinoLocalisationsDelegate(),
       ],
       supportedLocales: [
-        const Locale('en', 'US'), // Inglês
-        const Locale('pt', 'BR'), // Português do Brasil
+        const Locale('en', 'US'),
+        const Locale('pt', 'BR'),
       ],
       home: HomeScreen(),
     );

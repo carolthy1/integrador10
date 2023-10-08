@@ -7,7 +7,17 @@ extension TaskDetailExtension on Task {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Detalhes da Tarefa'),
+          contentPadding: EdgeInsets.all(16.0),
+          title: Row(
+            children: [
+              Icon(Icons.info_outline, size: 30.0),
+              SizedBox(width: 8.0),
+              Text(
+                'Detalhes da Tarefa',
+                style: TextStyle(fontSize: 20.0),
+              ),
+            ],
+          ),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,7 +59,17 @@ extension TaskDetailExtension on Task {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                    '$dueTime $dueDate',
+                    dueDate,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    'Hora de Entrega:',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    dueTime,
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
