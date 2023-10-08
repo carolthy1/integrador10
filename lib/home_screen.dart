@@ -62,30 +62,67 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text('Study Wave'),
       ),
-      body: ListView.builder(
-        itemCount: _tasks.length,
-        itemBuilder: (context, index) {
-          final task = _tasks[index];
-          return GestureDetector(
-            onTap: () {
-              task.showDetails(context);
-            },
-            child: Card(
-              elevation: 2,
-              margin: EdgeInsets.all(8),
-              child: ListTile(
-                title: Text(task.title),
-                subtitle: Text(task.description),
-                trailing: IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () {
-                    _deleteTask(task.id!);
-                  },
+      body: Padding(
+        padding: const EdgeInsets.only(top: 13.0, left: 8.0, right: 8.0), // Adicione margem apenas no topo
+        child: ListView.builder(
+          itemCount: _tasks.length,
+          itemBuilder: (context, index) {
+            final task = _tasks[index];
+            return GestureDetector(
+              onTap: () {
+                task.showDetails(context);
+              },
+              child: Card(
+                elevation: 3,
+                margin: EdgeInsets.all(8),
+                color: Color.fromARGB(181, 255, 254, 254),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(13.0), // Arredonda as bordas
+                ),
+                child: ListTile(
+                  title: Text(
+                    task.title,
+                    style: TextStyle(
+                      height: 2,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10), // Ajuste o tamanho deste espaço em branco
+                      Text(
+                        'Data de Entrega: ${task.dueDate}',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10), // Adicione a margem inferior aqui
+                        child: Text(
+                          'Hora de Entrega: ${task.dueTime}',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  trailing: Container(
+                    margin: EdgeInsets.all(5), // Adicione margens ao redor do ícone
+                    child: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        _deleteTask(task.id!);
+                      },
+                    ),
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
