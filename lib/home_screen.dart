@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:integrador2/task_detail.dart';
 import 'database.dart';
 import 'task.dart';
 
@@ -67,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
           final task = _tasks[index];
           return GestureDetector(
             onTap: () {
-              task.showDetailsDialog(context);
+              task.showDetails(context); // Corrigir a chamada do método para task.showDetails
             },
             child: Card(
               elevation: 2,
