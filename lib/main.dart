@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Gerenciador de Tarefas',
+      title: 'Study Wave',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

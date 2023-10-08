@@ -7,7 +7,7 @@ class Task {
   String description;
   String priority;
   String dueDate;
-  String dueTime; // Novo campo para a hora de entrega
+  String dueTime;
 
   Task({
     this.id,
@@ -15,7 +15,7 @@ class Task {
     required this.description,
     required this.priority,
     required this.dueDate,
-    required this.dueTime, // Adicionado ao construtor
+    required this.dueTime,
   });
 
   Map<String, dynamic> toMap() {
@@ -25,7 +25,7 @@ class Task {
       'description': description,
       'priority': priority,
       'dueDate': dueDate,
-      'dueTime': dueTime, // Adicionado ao mapa
+      'dueTime': dueTime,
     };
   }
 
@@ -36,7 +36,74 @@ class Task {
       description: map['description'],
       priority: map['priority'],
       dueDate: map['dueDate'],
-      dueTime: map['dueTime'], // Adicionado
+      dueTime: map['dueTime'],
+    );
+  }
+
+  Future<void> showDetailsDialog(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Detalhes da Tarefa'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  title: Text(
+                    'Título:',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    title,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    'Descrição:',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    description,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    'Prioridade:',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    priority,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    'Data de Entrega:',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    '$dueTime $dueDate',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Fechar'),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -149,15 +216,29 @@ class Task {
                   child: Text('Cancelar'),
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     final newTask = Task(
                       title: _titleController.text,
                       description: _descriptionController.text,
                       priority: selectedPriority,
                       dueDate: selectedDate,
-                      dueTime: selectedTime, // Adicionado ao criar a tarefa
+                      dueTime: selectedTime,
                     );
-                    Navigator.of(context).pop(newTask);
+
+                    if (_validateForm(
+                        newTask.title,
+                        newTask.description,
+                        newTask.priority,
+                        newTask.dueDate,
+                        newTask.dueTime)) {
+                      Navigator.of(context).pop(newTask);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Por favor, preencha todos os campos.'),
+                        ),
+                      );
+                    }
                   },
                   child: Text('Criar Tarefa'),
                 ),
@@ -169,70 +250,17 @@ class Task {
     );
   }
 
-  Future<void> showDetailsDialog(BuildContext context) async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Detalhes da Tarefa'),
-          content: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ListTile(
-                  title: Text(
-                    'Título:',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(
-                    title,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    'Descrição:',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(
-                    description,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    'Prioridade:',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(
-                    priority,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    'Data de Entrega:',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(
-                    '$dueTime $dueDate', // Mostrar data e hora
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Fechar'),
-            ),
-          ],
-        );
-      },
-    );
+  static bool _validateForm(
+    String title,
+    String description,
+    String priority,
+    String dueDate,
+    String dueTime,
+  ) {
+    return title.isNotEmpty &&
+        description.isNotEmpty &&
+        priority.isNotEmpty &&
+        dueDate.isNotEmpty &&
+        dueTime.isNotEmpty;
   }
 }
