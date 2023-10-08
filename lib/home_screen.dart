@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Study Wave'),
+        title: Text('Gerenciador de Tarefas'),
       ),
       body: ListView.builder(
         itemCount: _tasks.length,
