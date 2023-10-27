@@ -33,7 +33,6 @@ class MyApp extends StatelessWidget {
         const Locale('en', 'US'),
         const Locale('pt', 'BR'),
       ],
-      debugShowCheckedModeBanner: false, // Desabilitar o banner de depuração
       home: HomeScreen(),
     );
   }
@@ -53,5 +52,3 @@ class FallbackCupertinoLocalisationsDelegate
   @override
   bool shouldReload(FallbackCupertinoLocalisationsDelegate old) => false;
 }
-
-// Resto do código...
