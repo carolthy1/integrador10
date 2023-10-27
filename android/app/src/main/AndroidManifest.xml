@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="integrador2"
+        android:label="Study Wave"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/study_wave">
         <activity
             android:name=".MainActivity"
             android:exported="true"
