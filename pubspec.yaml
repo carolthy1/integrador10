@@ -28,3 +28,12 @@ flutter:
   uses-material-design: true
   assets:
     - assets\study_wave.png
+
+  fonts:
+    - family: MinhaFonte
+      fonts:
+        - asset: fonts\Inter\static\Inter-ExtraBold.ttf
+
+    - family: OpenSans
+      fonts:
+        - asset: fonts\Open_Sans\static\OpenSans-Medium.ttf

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'registration_screen.dart';
 import 'login_screen.dart';
 
@@ -39,6 +40,7 @@ class WelcomeScreen extends StatelessWidget {
                     Text(
                       'Study Wave', // Nome do seu aplicativo
                       style: TextStyle(
+                        fontFamily: 'MinhaFonte',
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ),
@@ -48,7 +50,7 @@ class WelcomeScreen extends StatelessWidget {
 
                     Text(
                       'Sua melhor plataforma de estudo.',
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontFamily: 'OpenSans', fontSize: 15),
                     ),
                   ],
                 ),
@@ -81,8 +83,9 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      'Começar Agora',
+                      'Começar agora',
                       style: TextStyle(
+                        fontFamily: 'OpenSans',
                         fontSize: 17,
                         color: Color.fromARGB(255, 0, 0, 0), // Cor do texto
                       ),
@@ -114,6 +117,7 @@ class WelcomeScreen extends StatelessWidget {
                     child: Text(
                       'Já tenho uma conta',
                       style: TextStyle(
+                        fontFamily: 'OpenSans',
                         fontSize: 17,
                         color: Color.fromARGB(255, 0, 0, 0), // Cor do texto
                       ),
