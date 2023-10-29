@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'login_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -11,41 +10,44 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final UsersDatabaseHelper _databaseHelper = UsersDatabaseHelper();
   String _errorMessage = '';
 
   void _registerUser() async {
     final email = _emailController.text;
     final password = _passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
-      return;
-    }
-
-    final db = await _databaseHelper.db;
-    final user = await db!.query(
-      'users',
-      where: 'email = ?',
-      whereArgs: [email],
-    );
-
-    if (user.isEmpty) {
-      await db.insert(
-        'users',
-        {'email': email, 'password': password},
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
       );
 
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setBool('user_logged_in', true);
-      prefs.setString('user_email', email);
-
+      // Usuário registrado com sucesso, você pode navegar para a próxima tela.
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => LoginScreen()),
       );
-    } else {
+    } on FirebaseAuthException catch (e) {
       setState(() {
-        _errorMessage = 'Usuário já existe. Tente outro email.';
+        _errorMessage = _getFirebaseAuthErrorMessage(e.code);
       });
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Ocorreu um erro inesperado: $e';
+      });
+    }
+  }
+
+  String _getFirebaseAuthErrorMessage(String code) {
+    switch (code) {
+      case 'email-already-in-use':
+        return 'Este email já está sendo usado por outra conta.';
+      case 'invalid-email':
+        return 'O email fornecido não é válido.';
+      case 'weak-password':
+        return 'A senha é muito fraca. Escolha uma senha mais forte.';
+      default:
+        return 'Erro ao criar a conta. Tente novamente mais tarde.';
     }
   }
 

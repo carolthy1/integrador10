@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -10,7 +10,46 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final UsersDatabaseHelper _databaseHelper = UsersDatabaseHelper();
+  String _errorMessage = '';
+
+  void _loginUser() async {
+    final email = _emailController.text;
+    final password = _passwordController.text;
+
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Usuário autenticado com sucesso, você pode navegar para a próxima tela.
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _errorMessage = _getFirebaseAuthErrorMessage(e.code);
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Ocorreu um erro inesperado: $e';
+      });
+    }
+  }
+
+  String _getFirebaseAuthErrorMessage(String code) {
+    switch (code) {
+      case 'invalid-email':
+        return 'O email fornecido não é válido.';
+      case 'user-not-found':
+        return 'Nenhuma conta encontrada com este email.';
+      case 'wrong-password':
+        return 'Senha incorreta. Verifique sua senha e tente novamente.';
+      default:
+        return 'Erro ao fazer login. Tente novamente mais tarde.';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,36 +76,17 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: _loginUser,
               child: Text('Login'),
             ),
+            if (_errorMessage.isNotEmpty)
+              Text(
+                _errorMessage,
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 16.0,
+                ),
+              ),
           ],
         ),
       ),
     );
-  }
-
-  void _loginUser() async {
-    final email = _emailController.text;
-    final password = _passwordController.text;
-
-    if (email.isEmpty || password.isEmpty) {
-      return;
-    }
-
-    final db = await _databaseHelper.db;
-    final user = await db!.query(
-      'users',
-      where: 'email = ? AND password = ?',
-      whereArgs: [email, password],
-    );
-
-    if (user.isNotEmpty) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Credenciais incorretas. Tente novamente.'),
-      ));
-    }
   }
 }

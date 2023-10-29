@@ -1,12 +1,26 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'home_screen.dart';
 import 'registration_screen.dart';
-import 'login_screen.dart';
+import 'welcome_screen.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+      apiKey: "AIzaSyBdXQFFkBBBEBck_uGt2JfUdcfo3GxfD3I",
+      appId: "1:286084969276:android:18b1b69d720423fdeee439",
+      messagingSenderId: "286084969276",
+      projectId: "bancologin-22278",
+    ),
+  );
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   final Color myColor = Color(0xFFDBCDFF);
@@ -49,7 +63,9 @@ class MyApp extends StatelessWidget {
             return CircularProgressIndicator();
           } else {
             final userLoggedIn = snapshot.data ?? false;
-            return userLoggedIn ? HomeScreen() : RegistrationScreen();
+            return userLoggedIn
+                ? HomeScreen()
+                : WelcomeScreen(); // Alterado para abrir a tela de boas-vindas
           }
         },
       ),
