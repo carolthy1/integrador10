@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "286084969276",
+    "project_id": "bancologin-22278",
+    "storage_bucket": "bancologin-22278.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:286084969276:android:18b1b69d720423fdeee439",
+        "android_client_info": {
+          "package_name": "com.example.integrador2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdXQFFkBBBEBck_uGt2JfUdcfo3GxfD3I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
