@@ -4,8 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'home_screen.dart';
-import 'registration_screen.dart';
 import 'welcome_screen.dart';
+import 'login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,15 +27,15 @@ class MyApp extends StatelessWidget {
 
   Future<bool> _checkIfUserLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
-    final userLoggedIn = prefs.getBool('user_logged_in');
-    return userLoggedIn == true;
+    final userLoggedIn = prefs.getBool('user_logged_in') ?? false;
+    return userLoggedIn;
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Study Wave',
-      debugShowCheckedModeBanner: false, // Remova o banner de "Debug"
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.light().copyWith(
         appBarTheme: AppBarTheme(
           toolbarHeight: 70.0,
@@ -64,9 +64,7 @@ class MyApp extends StatelessWidget {
             return CircularProgressIndicator();
           } else {
             final userLoggedIn = snapshot.data ?? false;
-            return userLoggedIn
-                ? HomeScreen()
-                : WelcomeScreen(); // Alterado para abrir a tela de boas-vindas
+            return userLoggedIn ? HomeScreen() : WelcomeScreen();
           }
         },
       ),
