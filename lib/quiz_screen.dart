@@ -9,7 +9,19 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Quiz App',
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
+        primarySwatch: MaterialColor(0xFFDDC3F5, <int, Color>{
+          50: Color(0xFFDDC3F5),
+          100: Color(0xFFDDC3F5),
+          200: Color(0xFFDDC3F5),
+          300: Color(0xFFDDC3F5),
+          400: Color(0xFFDDC3F5),
+          500: Color(0xFFDDC3F5),
+          600: Color(0xFFDDC3F5),
+          700: Color(0xFFDDC3F5),
+          800: Color(0xFFDDC3F5),
+          900: Color(0xFFDDC3F5),
+        }),
+        fontFamily: 'OpenSans',
       ),
       home: QuizScreen(),
     );
@@ -154,13 +166,13 @@ class _QuizScreenState extends State<QuizScreen> {
   String getMethodologyTips(String methodology) {
     switch (methodology) {
       case 'Cascata':
-        return 'Dicas para usar Cascata:\n1. Certifique-se de ter requisitos bem definidos antes de começar o projeto.\n2. Faça um planejamento detalhado desde o início.\n3. Documente cada fase do projeto minuciosamente.';
+        return '\n1. Certifique-se de ter requisitos bem definidos antes de começar o projeto.\n2. Faça um planejamento detalhado desde o início.\n3. Documente cada fase do projeto minuciosamente.';
       case 'Scrum':
-        return 'Dicas para usar Scrum:\n1. Mantenha iterações curtas e regulares (sprints).\n2. Priorize a flexibilidade para se adaptar a mudanças durante o desenvolvimento.\n3. Realize reuniões diárias para manter a equipe alinhada.';
+        return '\n1. Mantenha iterações curtas e regulares (sprints).\n2. Priorize a flexibilidade para se adaptar a mudanças durante o desenvolvimento.\n3. Realize reuniões diárias para manter a equipe alinhada.';
       case 'Kanban':
-        return 'Dicas para usar Kanban:\n1. Visualize seu fluxo de trabalho com um quadro Kanban.\n2. Limite o trabalho em andamento para evitar sobrecarga.\n3. Otimize continuamente seu processo com base nos dados do quadro.';
+        return '\n1. Visualize seu fluxo de trabalho com um quadro Kanban.\n2. Limite o trabalho em andamento para evitar sobrecarga.\n3. Otimize continuamente seu processo com base nos dados do quadro.';
       case 'Scrumban':
-        return 'Dicas para usar Scrumban:\n1. Combine elementos do Scrum e do Kanban conforme necessário.\n2. Mantenha um equilíbrio entre flexibilidade e controle do fluxo.\n3. Ajuste suas práticas de acordo com as necessidades específicas do projeto.';
+        return '\n1. Combine elementos do Scrum e do Kanban conforme necessário.\n2. Mantenha um equilíbrio entre flexibilidade e controle do fluxo.\n3. Ajuste suas práticas de acordo com as necessidades específicas do projeto.';
       default:
         return 'Dicas não disponíveis';
     }
@@ -171,7 +183,7 @@ class _QuizScreenState extends State<QuizScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Recomenda Metodologias'),
-        backgroundColor: Colors.indigo,
+        backgroundColor: Color(0xFFDDC3F5), // Mudei a cor da barra de navegação
       ),
       body: showResults
           ? ResultsWidget(
@@ -211,17 +223,25 @@ class QuestionWidget extends StatelessWidget {
           margin: EdgeInsets.all(16),
           padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.indigo),
+            color: Colors.white, // Mudei a cor de fundo da pergunta
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromRGBO(0, 0, 0, 0.1),
+                spreadRadius: 2,
+                blurRadius: 4,
+                offset: Offset(0, 2),
+              ),
+            ],
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
             questionText,
             style: TextStyle(
               fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.indigo,
+              fontFamily: 'OpenSans',
+              color: Colors.black, // Mudei a cor do texto para preto
             ),
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.justify, // Adicionei a justificação
           ),
         ),
         ...answers.map(
@@ -232,11 +252,17 @@ class QuestionWidget extends StatelessWidget {
               margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: InkWell(
                 onTap: () => answerCallback(answer),
-                child: Padding(
+                child: Container(
+                  width: double.infinity,
                   padding: EdgeInsets.all(16),
-                  child: Text(
-                    answer,
-                    style: TextStyle(fontSize: 18),
+                  child: Center(
+                    child: Text(
+                      answer,
+                      style: TextStyle(
+                          fontSize: 18,
+                          color:
+                              Colors.black), // Mudei a cor do texto para preto
+                    ),
                   ),
                 ),
               ),
@@ -276,8 +302,8 @@ class ResultsWidget extends StatelessWidget {
                 'Metodologia recomendada para você: $recommendedMethodology',
                 style: TextStyle(
                   fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.indigo,
+                  fontFamily: 'OpenSans',
+                  color: Colors.black, // Mudei a cor do texto para preto
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -286,16 +312,19 @@ class ResultsWidget extends StatelessWidget {
                 'Descrição:',
                 style: TextStyle(
                   fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.indigo,
+                  fontFamily: 'OpenSans',
+                  color: Colors.black, // Mudei a cor do texto para preto
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   methodologyDescription,
-                  style: TextStyle(fontSize: 18, color: Colors.indigo),
-                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'OpenSans',
+                      color: Colors.black), // Mudei a cor do texto para preto
+                  textAlign: TextAlign.justify, // Adicionei a justificação
                 ),
               ),
               SizedBox(height: 20),
@@ -303,24 +332,27 @@ class ResultsWidget extends StatelessWidget {
                 'Dicas práticas:',
                 style: TextStyle(
                   fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.indigo,
+                  fontFamily: 'OpenSans',
+                  color: Colors.black, // Mudei a cor do texto para preto
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   methodologyTips,
-                  style: TextStyle(fontSize: 18, color: Colors.indigo),
-                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'OpenSans',
+                      color: Colors.black), // Mudei a cor do texto para preto
+                  textAlign: TextAlign.justify, // Adicionei a justificação
                 ),
               ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: restartCallback,
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.indigo,
-                  onPrimary: Colors.white,
+                  primary: Color(0xFFDDC3F5), // Mudei a cor do botão
+                  onPrimary: Colors.black, // Mudei a cor do texto para preto
                   padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
