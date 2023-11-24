@@ -1,7 +1,9 @@
+// homescreen.dart
 import 'package:flutter/material.dart';
 import 'package:integrador2/task_detail.dart';
 import 'database.dart';
 import 'task.dart';
+import 'study_methods.dart'; // Importe a nova página de métodos de estudo
 
 void main() => runApp(HomeScreen());
 
@@ -63,65 +65,68 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text('Study Wave'),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(
-            top: 13.0, left: 8.0, right: 8.0), // Adicione margem apenas no topo
+        padding: const EdgeInsets.only(top: 13.0, left: 8.0, right: 8.0),
         child: ListView.builder(
           itemCount: _tasks.length,
           itemBuilder: (context, index) {
             final task = _tasks[index];
             return GestureDetector(
               onTap: () {
-                task.showDetails(context);
-              },
-              child: Card(
-                elevation: 3,
-                margin: EdgeInsets.all(8),
-                color: Color.fromARGB(181, 255, 254, 254),
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(13.0), // Arredonda as bordas
-                ),
-                child: ListTile(
-                  title: Text(
-                    task.title,
-                    style: TextStyle(
-                      height: 2,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.normal,
-                    ),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TaskDetailPage(task: task),
                   ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                          height:
-                              10), // Ajuste o tamanho deste espaço em branco
-                      Text(
-                        'Data de Entrega: ${task.dueDate}',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                        ),
+                );
+              },
+              child: Hero(
+                tag:
+                    'taskCard_${task.id}', // Use uma tag única para cada tarefa
+                child: Card(
+                  elevation: 3,
+                  margin: EdgeInsets.all(8),
+                  color: Color.fromARGB(181, 255, 254, 254),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(13.0),
+                  ),
+                  child: ListTile(
+                    title: Text(
+                      task.title,
+                      style: TextStyle(
+                        height: 2,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.normal,
                       ),
-                      Container(
-                        margin: EdgeInsets.only(
-                            bottom: 10), // Adicione a margem inferior aqui
-                        child: Text(
-                          'Hora de Entrega: ${task.dueTime}',
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 10),
+                        Text(
+                          'Data de Entrega: ${task.dueDate}',
                           style: TextStyle(
                             fontSize: 16.0,
                           ),
                         ),
+                        Container(
+                          margin: EdgeInsets.only(bottom: 10),
+                          child: Text(
+                            'Hora de Entrega: ${task.dueTime}',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    trailing: Container(
+                      margin: EdgeInsets.all(5),
+                      child: IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          _deleteTask(task.id!);
+                        },
                       ),
-                    ],
-                  ),
-                  trailing: Container(
-                    margin:
-                        EdgeInsets.all(5), // Adicione margens ao redor do ícone
-                    child: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        _deleteTask(task.id!);
-                      },
                     ),
                   ),
                 ),
@@ -130,11 +135,28 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _createTask(context);
-        },
-        child: Icon(Icons.add),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              _createTask(context);
+            },
+            child: Icon(Icons.add),
+            heroTag: null, // Adicione esta linha para evitar conflitos de Hero
+          ),
+          SizedBox(height: 16),
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => StudyMethodsPage()),
+              );
+            },
+            child: Icon(Icons.book),
+            heroTag: null, // Adicione esta linha para evitar conflitos de Hero
+          ),
+        ],
       ),
     );
   }
