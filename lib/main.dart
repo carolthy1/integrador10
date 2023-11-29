@@ -13,11 +13,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Study Wave',
+      debugShowCheckedModeBanner: false, // Remover o banner de depuração
       theme: ThemeData.light().copyWith(
         appBarTheme: AppBarTheme(
-          toolbarHeight: 70.0, // Defina a altura da faixa da AppBar aqui
-          elevation: 4, // Ajuste a elevação da AppBar aqui
-          centerTitle: true, // Centralize o título
+          toolbarHeight: 70.0,
+          elevation: 4,
+          centerTitle: true,
         ),
         colorScheme: ColorScheme.light(
           primary: myColor,

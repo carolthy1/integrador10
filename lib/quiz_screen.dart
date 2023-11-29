@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'OpenSans',
       ),
       home: QuizScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

@@ -10,6 +10,7 @@ class StudyMethodsPage extends StatelessWidget {
         primarySwatch: Colors.purple,
       ),
       home: StartPage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
