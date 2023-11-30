@@ -13,6 +13,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   String _errorMessage = '';
   bool _resetPasswordRequested = false;
+  bool _isPasswordVisible = false; // Novo estado para visibilidade da senha
   final _formKey = GlobalKey<FormState>();
 
   void _showErrorDialog(String errorMessage) {
@@ -97,14 +98,12 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  String _getFirebaseAuthErrorMessage(String code) {
-    switch (code) {
+  String _getFirebaseAuthErrorMessage(String errorCode) {
+    switch (errorCode) {
       case 'invalid-email':
         return 'O email fornecido não é válido.';
-      case 'user-not-found':
-        return 'Nenhuma conta encontrada com este email.';
-      case 'wrong-password':
-        return 'Senha incorreta. Verifique sua senha e tente novamente.';
+      case 'invalid-credential':
+        return 'As credenciais fornecidas estão incorretas. Por favor, verifique o e-mail e a senha e tente novamente.';
       default:
         return 'Erro ao fazer login. Tente novamente mais tarde.';
     }
@@ -131,9 +130,23 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: EdgeInsets.only(left: 8.0),
             child: Icon(icon),
           ),
+          suffixIcon: obscureText
+              ? IconButton(
+                  icon: Icon(
+                    _isPasswordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isPasswordVisible = !_isPasswordVisible;
+                    });
+                  },
+                )
+              : null,
           border: InputBorder.none,
         ),
-        obscureText: obscureText,
+        obscureText: obscureText ? !_isPasswordVisible : false,
         validator: validator,
       ),
     );
@@ -158,120 +171,113 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/background1.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 100),
-              Text(
-                'Study Wave',
-                style: TextStyle(
-                  fontFamily: 'MinhaFonte',
-                  fontSize: 35.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+      body: Stack(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/background1.png'),
+                fit: BoxFit.cover,
               ),
-              Container(
-                margin: EdgeInsets.only(top: 220),
-                child: Text(
-                  'Login',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontFamily: 'OpenSans',
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(height: 100),
+                  Text(
+                    'Study Wave',
+                    style: TextStyle(
+                      fontFamily: 'MinhaFonte',
+                      fontSize: 35.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      _buildInputField(
-                        labelText: 'Email',
-                        controller: _emailController,
-                        icon: Icons.email,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Informe seu email';
-                          }
-                          return null;
-                        },
+                  Container(
+                    margin: EdgeInsets.only(top: 220),
+                    child: Text(
+                      'Login',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontFamily: 'OpenSans',
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
                       ),
-                      _buildInputField(
-                        labelText: 'Senha',
-                        controller: _passwordController,
-                        icon: Icons.lock,
-                        obscureText: true,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Informe sua senha';
-                          }
-                          if (value.length < 6) {
-                            return 'A senha deve conter pelo menos 6 caracteres';
-                          }
-                          return null;
-                        },
-                      ),
-                      _buildResetPasswordButton(),
-                      SizedBox(height: 16.0),
-                      ElevatedButton(
-                        onPressed: _resetPasswordRequested ? null : _loginUser,
-                        child: Text('Login'),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            Color.fromARGB(255, 191, 162, 211),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          _buildInputField(
+                            labelText: 'Email',
+                            controller: _emailController,
+                            icon: Icons.email,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Informe seu email';
+                              }
+                              return null;
+                            },
                           ),
-                          overlayColor: MaterialStateProperty.all<Color>(
-                            const Color.fromARGB(255, 177, 156, 202)!,
+                          _buildInputField(
+                            labelText: 'Senha',
+                            controller: _passwordController,
+                            icon: Icons.lock,
+                            obscureText: true,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Informe sua senha';
+                              }
+                              if (value.length < 6) {
+                                return 'A senha deve conter pelo menos 6 caracteres';
+                              }
+                              return null;
+                            },
                           ),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(
-                                color: Color.fromARGB(255, 221, 195, 245),
+                          _buildResetPasswordButton(),
+                          SizedBox(height: 16.0),
+                          ElevatedButton(
+                            onPressed:
+                                _resetPasswordRequested ? null : _loginUser,
+                            child: Text('Login'),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                Color.fromARGB(255, 191, 162, 211),
+                              ),
+                              overlayColor: MaterialStateProperty.all<Color>(
+                                const Color.fromARGB(255, 177, 156, 202)!,
+                              ),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  side: BorderSide(
+                                    color: Color.fromARGB(255, 221, 195, 245),
+                                  ),
+                                ),
+                              ),
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.symmetric(
+                                  horizontal: 40.0,
+                                  vertical: 10.0,
+                                ),
                               ),
                             ),
                           ),
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                            EdgeInsets.symmetric(
-                              horizontal: 40.0,
-                              vertical: 10.0,
-                            ),
-                          ),
-                        ),
+                        ],
                       ),
-                      if (_errorMessage.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            _errorMessage,
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 16.0,
-                              backgroundColor: Colors.transparent,
-                            ),
-                          ),
-                        ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
