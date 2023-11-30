@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:integrador2/task_detail.dart';
 import 'database.dart';
 import 'task.dart';
-import 'study_methods.dart'; // Importe a nova página de métodos de estudo
-
-void main() => runApp(HomeScreen());
+import 'task_detail.dart';
+import 'study_methods.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -72,16 +71,15 @@ class _HomeScreenState extends State<HomeScreen> {
             final task = _tasks[index];
             return GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => TaskDetailPage(task: task),
-                  ),
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return TaskDetailPage(task: task);
+                  },
                 );
               },
               child: Hero(
-                tag:
-                    'taskCard_${task.id}', // Use uma tag única para cada tarefa
+                tag: 'taskCard_${task.id}',
                 child: Card(
                   elevation: 3,
                   margin: EdgeInsets.all(8),
@@ -143,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
               _createTask(context);
             },
             child: Icon(Icons.add),
-            heroTag: null, // Adicione esta linha para evitar conflitos de Hero
+            heroTag: null,
           ),
           SizedBox(height: 16),
           FloatingActionButton(
@@ -154,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
             child: Icon(Icons.book),
-            heroTag: null, // Adicione esta linha para evitar conflitos de Hero
+            heroTag: null,
           ),
         ],
       ),

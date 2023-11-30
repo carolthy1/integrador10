@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'home_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Importe esta biblioteca
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -15,6 +15,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _usernameController = TextEditingController();
   String _errorMessage = '';
   final _formKey = GlobalKey<FormState>();
+  bool _passwordVisible = false;
 
   void _showErrorDialog(String errorMessage) {
     showDialog(
@@ -232,9 +233,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             padding: EdgeInsets.only(left: 8.0),
             child: Icon(icon),
           ),
+          suffixIcon: obscureText
+              ? IconButton(
+                  icon: Icon(
+                    _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
+                  },
+                )
+              : null,
           border: InputBorder.none,
         ),
-        obscureText: obscureText,
+        obscureText: obscureText && !_passwordVisible,
         validator: validator,
       ),
     );
