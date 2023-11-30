@@ -12,6 +12,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String _errorMessage = '';
+  bool _resetPasswordRequested = false;
   final _formKey = GlobalKey<FormState>();
 
   void _showErrorDialog(String errorMessage) {
@@ -67,6 +68,35 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  void _resetPassword() async {
+    if (_resetPasswordRequested) {
+      return;
+    }
+
+    final email = _emailController.text;
+
+    try {
+      setState(() {
+        _resetPasswordRequested = true;
+      });
+
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text('Um e-mail de redefinição de senha foi enviado para $email'),
+        ),
+      );
+    } catch (e) {
+      print('Erro ao enviar e-mail de redefinição de senha: $e');
+    } finally {
+      setState(() {
+        _resetPasswordRequested = false;
+      });
+    }
+  }
+
   String _getFirebaseAuthErrorMessage(String code) {
     switch (code) {
       case 'invalid-email':
@@ -105,6 +135,21 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         obscureText: obscureText,
         validator: validator,
+      ),
+    );
+  }
+
+  Widget _buildResetPasswordButton() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: InkWell(
+        onTap: _resetPassword,
+        child: Text(
+          'Esqueci minha senha',
+          style: TextStyle(
+            decoration: TextDecoration.underline,
+          ),
+        ),
       ),
     );
   }
@@ -179,9 +224,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           return null;
                         },
                       ),
+                      _buildResetPasswordButton(),
                       SizedBox(height: 16.0),
                       ElevatedButton(
-                        onPressed: _loginUser,
+                        onPressed: _resetPasswordRequested ? null : _loginUser,
                         child: Text('Login'),
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
