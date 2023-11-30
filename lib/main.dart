@@ -1,19 +1,41 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'home_screen.dart';
-import 'study_methods.dart'; // Adicionei esta linha para importar o arquivo de métodos de estudo
+import 'welcome_screen.dart';
+import 'login_screen.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+      apiKey: "AIzaSyBdXQFFkBBBEBck_uGt2JfUdcfo3GxfD3I",
+      appId: "1:286084969276:android:18b1b69d720423fdeee439",
+      messagingSenderId: "286084969276",
+      projectId: "bancologin-22278",
+    ),
+  );
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   final Color myColor = Color(0xFFDBCDFF);
+
+  Future<bool> _checkIfUserLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userLoggedIn = prefs.getBool('user_logged_in') ?? false;
+    return userLoggedIn;
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Study Wave',
-      debugShowCheckedModeBanner: false, // Remover o banner de depuração
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.light().copyWith(
         appBarTheme: AppBarTheme(
           toolbarHeight: 70.0,
@@ -35,7 +57,17 @@ class MyApp extends StatelessWidget {
         const Locale('en', 'US'),
         const Locale('pt', 'BR'),
       ],
-      home: HomeScreen(),
+      home: FutureBuilder<bool>(
+        future: _checkIfUserLoggedIn(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else {
+            final userLoggedIn = snapshot.data ?? false;
+            return userLoggedIn ? HomeScreen() : WelcomeScreen();
+          }
+        },
+      ),
     );
   }
 }
