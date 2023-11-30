@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'login_screen.dart';
+import 'home_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Importe esta biblioteca
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -11,6 +12,7 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   String _errorMessage = '';
   final _formKey = GlobalKey<FormState>();
 
@@ -38,6 +40,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     if (_formKey.currentState!.validate()) {
       final email = _emailController.text;
       final password = _passwordController.text;
+      final username = _usernameController.text;
 
       try {
         UserCredential userCredential =
@@ -46,12 +49,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           password: password,
         );
 
+        // Agora, você pode salvar o nome de usuário no Firebase Firestore
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .set({
+          'username': username,
+        });
+
         // Após o registro bem-sucedido, defina o estado de login no SharedPreferences
         final prefs = await SharedPreferences.getInstance();
         prefs.setBool('user_logged_in', true);
 
         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => LoginScreen()));
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
       } on FirebaseAuthException catch (e) {
         setState(() {
           _errorMessage = _getFirebaseAuthErrorMessage(e.code);
@@ -123,6 +135,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
+                      _buildInputField(
+                        labelText: 'Nome de Usuário',
+                        controller: _usernameController,
+                        icon: Icons.person,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Informe seu nome de usuário';
+                          }
+                          return null;
+                        },
+                      ),
                       _buildInputField(
                         labelText: 'Email',
                         controller: _emailController,
