@@ -5,6 +5,7 @@ import 'database.dart';
 import 'task.dart';
 import 'task_detail.dart';
 import 'study_methods.dart';
+import 'quiz_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -148,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => StudyMethodsPage()),
+                MaterialPageRoute(builder: (context) => QuizScreen()),
               );
             },
             child: Icon(Icons.book),
