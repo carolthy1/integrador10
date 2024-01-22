@@ -47,98 +47,56 @@ class _QuizScreenState extends State<QuizScreen> {
       if (questionIndex < questions.length - 1) {
         questionIndex++;
       } else {
-        // Se todas as perguntas foram respondidas, mostra os resultados.
         showResults = true;
-        saveUserPreferences(); // Salva as respostas do usuário
+        saveUserPreferences();
+      }
+
+      // Randomizar a ordem das respostas antes de exibi-las
+      if (!showResults) {
+        questions[questionIndex]['answers'].shuffle();
       }
     });
   }
 
   final List<Map<String, dynamic>> questions = [
     {
-      'questionText': 'Prefere planejamento detalhado ou flexibilidade?',
-      'answers': ['Detalhado', 'Flexibilidade'],
-    },
-    {
-      'questionText': 'Gosta de iterações curtas ou longas?',
-      'answers': ['Curtas', 'Longas'],
-    },
-    {
-      'questionText': 'Você prefere documentação extensa ou mínima?',
-      'answers': ['Extensa', 'Mínima'],
-    },
-    {
-      'questionText': 'Como você lida com mudanças no projeto?',
-      'answers': ['Adapto facilmente', 'Prefiro evitar mudanças'],
-    },
-    {
-      'questionText': 'Como você se sente em relação à colaboração em equipe?',
-      'answers': ['Adoro trabalhar em equipe', 'Prefiro trabalhar sozinho'],
-    },
-    {
-      'questionText': 'Você gosta de definir metas específicas para o projeto?',
+      'questionText': 'Como você geralmente organiza seus períodos de estudo?',
       'answers': [
-        'Sim, metas claras são essenciais',
-        'Não, prefiro flexibilidade'
-      ],
-    },
-    {
-      'questionText': 'Prefere estudos contínuos ou intervalados?',
-      'answers': ['Contínuos', 'Intervalados'],
-    },
-    {
-      'questionText':
-          'Você costuma utilizar técnicas de gerenciamento de tempo?',
-      'answers': ['Sim', 'Não'],
-    },
-    {
-      'questionText':
-          'Quanto tempo você consegue se concentrar sem interrupções?',
-      'answers': ['Curto período', 'Longo período'],
-    },
-    // Novas perguntas relacionadas ao método de estudo "Pomodoro"
-    {
-      'questionText': 'Você costuma utilizar a técnica Pomodoro?',
-      'answers': ['Sim', 'Não'],
-    },
-    {
-      'questionText': 'Qual é a duração ideal para seus períodos de estudo?',
-      'answers': ['25 minutos', '50 minutos'],
-    },
-    {
-      'questionText': 'Prefere pausas curtas ou longas durante os intervalos?',
-      'answers': ['Curtas', 'Longas'],
-    },
-    {
-      'questionText':
-          'Você prefere trabalhar em blocos de tempo focado seguidos por pausas curtas?',
-      'answers': ['Sim', 'Não'],
-    },
-    {
-      'questionText': 'Como você lida com interrupções durante o trabalho?',
-      'answers': [
-        'Bem, consigo retomar facilmente',
-        'Prefiro evitar interrupções'
+        'Divido meu tempo em ciclos concentrados com pausas regulares. (Método Pomodoro)',
+        'Crio esquemas visuais para compreender melhor o conteúdo. (Mapa Mental)',
+        'Intercalei o estudo entre diferentes matérias para evitar monotonia. (Estudo Intercalado)',
+        'Faço testes práticos e reviso com base em resultados. (Testes Práticos)',
       ],
     },
     {
       'questionText':
-          'Você acha útil definir metas de produtividade para períodos específicos?',
-      'answers': ['Sim', 'Não'],
+          'Qual é a sua abordagem ao revisar e consolidar informações?',
+      'answers': [
+        'Opto por períodos focados, seguidos por pausas curtas. (Método Pomodoro)',
+        'Prefiro criar representações visuais para facilitar a compreensão. (Mapa Mental)',
+        'Vario entre disciplinas para manter a mente engajada. (Estudo Intercalado)',
+        'Realizo práticas como resolver exercícios e simulados. (Testes Práticos)',
+      ],
     },
     {
-      'questionText':
-          'Qual a sua opinião sobre pausas curtas durante o estudo/trabalho?',
+      'questionText': 'Como você lida com a assimilação de novos conceitos?',
       'answers': [
-        'São essenciais para minha produtividade',
-        'Podem ser dispensáveis'
+        'Utilizo intervalos de foco intenso intercalados com descanso. (Método Pomodoro)',
+        'Construo conexões visuais e mentais com mapas conceituais. (Mapa Mental)',
+        'Alternância entre diferentes disciplinas para manter o interesse. (Estudo Intercalado)',
+        'Reforço o aprendizado por meio de testes práticos. (Testes Práticos)',
       ],
     },
     {
       'questionText':
-          'Você se considera uma pessoa concentrada por longos períodos?',
-      'answers': ['Sim', 'Não'],
-    },
+          'Qual estratégia você acha mais eficaz para avaliar seu conhecimento?',
+      'answers': [
+        'Avalio meu progresso com períodos cronometrados. (Método Pomodoro)',
+        'Utilizo mapas mentais como uma ferramenta de revisão visual. (Mapa Mental)',
+        'Vario entre disciplinas para uma abordagem mais completa. (Estudo Intercalado)',
+        'Faço testes práticos e simulados para avaliar minha compreensão. (Testes Práticos)',
+      ],
+    }
   ];
 
   Future<void> saveUserPreferences() async {
@@ -147,107 +105,82 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   String calculateRecommendedMethodology() {
-    int scoreCascata = 0;
-    int scoreScrum = 0;
-    int scoreKanban = 0;
-    int scoreScrumban = 0;
-    int scorePomodoro = 0;
+    Map<String, String> methodologyKeywords = {
+      'Divido meu tempo em ciclos concentrados com pausas regulares. (Método Pomodoro)':
+          'Pomodoro',
+      'Crio esquemas visuais para compreender melhor o conteúdo. (Mapa Mental)':
+          'Mapa Mental',
+      'Intercalei o estudo entre diferentes matérias para evitar monotonia. (Estudo Intercalado)':
+          'Estudo Intercalado',
+      'Faço testes práticos e reviso com base em resultados. (Testes Práticos)':
+          'Testes Práticos',
+      'Opto por períodos focados, seguidos por pausas curtas. (Método Pomodoro)':
+          'Pomodoro',
+      'Prefiro criar representações visuais para facilitar a compreensão. (Mapa Mental)':
+          'Mapa Mental',
+      'Vario entre disciplinas para manter a mente engajada. (Estudo Intercalado)':
+          'Estudo Intercalado',
+      'Realizo práticas como resolver exercícios e simulados. (Testes Práticos)':
+          'Testes Práticos',
+      'Utilizo intervalos de foco intenso intercalados com descanso. (Método Pomodoro)':
+          'Pomodoro',
+      'Construo conexões visuais e mentais com mapas conceituais. (Mapa Mental)':
+          'Mapa Mental',
+      'Alternância entre diferentes disciplinas para manter o interesse. (Estudo Intercalado)':
+          'Estudo Intercalado',
+      'Reforço o aprendizado por meio de testes práticos. (Testes Práticos)':
+          'Testes Práticos',
+      'Avalio meu progresso com períodos cronometrados. (Método Pomodoro)':
+          'Pomodoro',
+      'Utilizo mapas mentais como uma ferramenta de revisão visual. (Mapa Mental)':
+          'Mapa Mental',
+      'Vario entre disciplinas para uma abordagem mais completa. (Estudo Intercalado)':
+          'Estudo Intercalado',
+      'Faço testes práticos e simulados para avaliar minha compreensão. (Testes Práticos)':
+          'Testes Práticos',
+    };
+
+    Map<String, int> scores = {
+      'Pomodoro': 0,
+      'Mapa Mental': 0,
+      'Estudo Intercalado': 0,
+      'Testes Práticos': 0,
+    };
 
     for (String answer in answers) {
-      if (answer == 'Detalhado') {
-        scoreCascata++;
-      } else if (answer == 'Flexibilidade') {
-        scoreScrum++;
-      }
-      if (answer == 'Curtas') {
-        scoreScrum++;
-      } else if (answer == 'Longas') {
-        scoreKanban++;
-      }
-      if (answer == 'Extensa') {
-        scoreCascata++;
-      } else if (answer == 'Mínima') {
-        scoreKanban++;
-      }
-      if (answer == 'Adapto facilmente') {
-        scoreScrum++;
-      } else if (answer == 'Prefiro evitar mudanças') {
-        scoreCascata++;
-      }
-      if (answer == 'Adoro trabalhar em equipe') {
-        scoreScrumban++;
-      } else if (answer == 'Prefiro trabalhar sozinho') {
-        scoreKanban++;
-      }
-      if (answer == 'Sim, metas claras são essenciais') {
-        scoreCascata++;
-      } else if (answer == 'Não, prefiro flexibilidade') {
-        scoreScrumban++;
-      }
-      // Pontuação relacionada à técnica Pomodoro
-      if (answer == 'Sim') {
-        scorePomodoro++;
-      } else if (answer == 'Não') {
-        // Pode adicionar lógica adicional, se necessário
-      }
-      if (answer == '25 minutos') {
-        scorePomodoro++;
-      } else if (answer == '50 minutos') {
-        // Pode adicionar lógica adicional, se necessário
-      }
-      if (answer == 'Curtas') {
-        scorePomodoro++;
-      } else if (answer == 'Longas') {
-        // Pode adicionar lógica adicional, se necessário
-      }
-      if (answer == 'Sim') {
-        scorePomodoro++;
-      } else if (answer == 'Não') {
-        // Pode adicionar lógica adicional, se necessário
-      }
-      if (answer == 'Bem, consigo retomar facilmente') {
-        scorePomodoro++;
-      } else if (answer == 'Prefiro evitar interrupções') {
-        // Pode adicionar lógica adicional, se necessário
-      }
-      if (answer == 'Sim') {
-        scorePomodoro++;
-      } else if (answer == 'Não') {
-        // Pode adicionar lógica adicional, se necessário
+      for (String keyword in methodologyKeywords.keys) {
+        if (answer.contains(keyword)) {
+          String methodology = methodologyKeywords[keyword]!;
+          scores.update(methodology, (value) => value + 1);
+        }
       }
     }
 
-    // Adiciona a pontuação do Pomodoro à lógica de pontuação geral
-    if (scorePomodoro > scoreScrum &&
-        scorePomodoro > scoreCascata &&
-        scorePomodoro > scoreKanban &&
-        scorePomodoro > scoreScrumban) {
-      return 'Pomodoro';
-    } else if (scoreScrum > scoreCascata &&
-        scoreScrum > scoreKanban &&
-        scoreScrum > scoreScrumban) {
-      return 'Scrum';
-    } else if (scoreCascata > scoreKanban && scoreCascata > scoreScrumban) {
-      return 'Cascata';
-    } else if (scoreKanban > scoreScrumban) {
-      return 'Kanban';
-    } else {
-      return 'Scrumban';
-    }
+    int maxScore =
+        scores.values.reduce((max, score) => max > score ? max : score);
+
+    List<String> recommendedMethodologies =
+        scores.keys.where((key) => scores[key] == maxScore).toList();
+
+    print('Scores: $scores');
+    print('Max Score: $maxScore');
+    print('Recommended Methodologies: $recommendedMethodologies');
+
+    return recommendedMethodologies.length == 1
+        ? recommendedMethodologies.first
+        : 'Indeciso';
   }
 
   String getMethodologyDescription(String methodology) {
     switch (methodology) {
-      case 'Cascata':
-        return 'A metodologia Cascata é conhecida por seu foco em planejamento detalhado e documentação extensa. Ela é adequada para projetos com requisitos bem definidos desde o início.';
-      case 'Scrum':
-        return 'Scrum é uma metodologia ágil que enfatiza a flexibilidade e iterações curtas. É ideal para projetos que podem se adaptar a mudanças frequentes e feedback contínuo.';
-      case 'Kanban':
-        return 'Kanban é uma abordagem visual que se concentra na gestão do fluxo de trabalho. É recomendada para projetos que exigem um controle rigoroso do trabalho em andamento.';
-      case 'Scrumban':
-        return 'Scrumban combina elementos do Scrum e do Kanban, oferecendo flexibilidade e controle do fluxo. É uma escolha sólida para projetos que desejam uma abordagem híbrida.';
       case 'Pomodoro':
         return 'A técnica Pomodoro é um método de gerenciamento de tempo que utiliza intervalos de trabalho focado, chamados "Pomodoros", seguidos por breves pausas. Essa abordagem visa melhorar a eficiência e manter alta a concentração ao dividir o trabalho em segmentos cronometrados.';
+      case 'Mapa Mental':
+        return 'O Mapa Mental é uma técnica que envolve a criação de diagramas visuais para organizar informações e auxiliar na compreensão de conceitos. Essa abordagem é útil para visualizar conexões entre ideias e facilitar a memorização.';
+      case 'Estudo Intercalado':
+        return 'O Estudo Intercalado é uma estratégia de aprendizado que envolve alternar entre diferentes matérias durante as sessões de estudo. Essa abordagem ajuda a evitar a monotonia, melhorando a retenção e o entendimento do conteúdo.';
+      case 'Testes Práticos':
+        return 'Os Testes Práticos são uma prática que envolve a realização de exercícios e avaliações práticas para reforçar o aprendizado. Essa abordagem é eficaz para verificar a compreensão do conteúdo e identificar áreas que precisam de revisão.';
       default:
         return 'Descrição não disponível';
     }
@@ -255,16 +188,14 @@ class _QuizScreenState extends State<QuizScreen> {
 
   String getMethodologyTips(String methodology) {
     switch (methodology) {
-      case 'Cascata':
-        return '\n1. Certifique-se de ter requisitos bem definidos antes de começar o projeto.\n2. Faça um planejamento detalhado desde o início.\n3. Documente cada fase do projeto minuciosamente.';
-      case 'Scrum':
-        return '\n1. Mantenha iterações curtas e regulares (sprints).\n2. Priorize a flexibilidade para se adaptar a mudanças durante o desenvolvimento.\n3. Realize reuniões diárias para manter a equipe alinhada.';
-      case 'Kanban':
-        return '\n1. Visualize seu fluxo de trabalho com um quadro Kanban.\n2. Limite o trabalho em andamento para evitar sobrecarga.\n3. Otimize continuamente seu processo com base nos dados do quadro.';
-      case 'Scrumban':
-        return '\n1. Combine elementos do Scrum e do Kanban conforme necessário.\n2. Mantenha um equilíbrio entre flexibilidade e controle do fluxo.\n3. Ajuste suas práticas de acordo com as necessidades específicas do projeto.';
       case 'Pomodoro':
         return '\n1. Configure um temporizador para períodos de trabalho de 25 minutos (um Pomodoro).\n2. Concentre-se intensamente na tarefa durante o Pomodoro, evitando distrações.\n3. Após cada Pomodoro, faça uma pausa curta de 5 minutos.\n4. Após completar quatro Pomodoros, faça uma pausa mais longa, de 15-30 minutos.\n5. Ajuste a duração dos Pomodoros e pausas conforme sua preferência e necessidades.';
+      case 'Mapa Mental':
+        return '\n1. Comece pelo centro do mapa mental, colocando o conceito principal.\n2. Use cores, imagens e palavras-chave para representar informações.\n3. Conecte ideias relacionadas com linhas ou ramificações.\n4. Mantenha o mapa mental claro e conciso para facilitar a compreensão.';
+      case 'Estudo Intercalado':
+        return '\n1. Divida seu tempo de estudo em blocos para diferentes matérias.\n2. Alterne entre os blocos de estudo, evitando longos períodos em uma única disciplina.\n3. Reserve intervalos curtos para descanso entre os blocos de estudo.\n4. Revise as informações periodicamente para reforçar a retenção.';
+      case 'Testes Práticos':
+        return '\n1. Realize exercícios práticos relacionados ao conteúdo estudado.\n2. Utilize simulados e testes para avaliar sua compreensão.\n3. Identifique áreas de dificuldade e concentre-se nelas durante a revisão.\n4. Analise os resultados dos testes para direcionar seus esforços de estudo.';
       default:
         return 'Dicas não disponíveis';
     }
