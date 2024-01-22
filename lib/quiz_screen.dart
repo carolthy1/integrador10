@@ -62,41 +62,71 @@ class _QuizScreenState extends State<QuizScreen> {
     {
       'questionText': 'Como você geralmente organiza seus períodos de estudo?',
       'answers': [
-        'Divido meu tempo em ciclos concentrados com pausas regulares. (Método Pomodoro)',
-        'Crio esquemas visuais para compreender melhor o conteúdo. (Mapa Mental)',
-        'Intercalei o estudo entre diferentes matérias para evitar monotonia. (Estudo Intercalado)',
-        'Faço testes práticos e reviso com base em resultados. (Testes Práticos)',
+        'Divido meu tempo em ciclos concentrados com pausas regulares.',
+        'Crio esquemas visuais para compreender melhor o conteúdo.',
+        'Intercalei o estudo entre diferentes matérias para evitar monotonia.',
+        'Faço testes práticos e reviso com base em resultados.',
       ],
     },
     {
       'questionText':
           'Qual é a sua abordagem ao revisar e consolidar informações?',
       'answers': [
-        'Opto por períodos focados, seguidos por pausas curtas. (Método Pomodoro)',
-        'Prefiro criar representações visuais para facilitar a compreensão. (Mapa Mental)',
-        'Vario entre disciplinas para manter a mente engajada. (Estudo Intercalado)',
-        'Realizo práticas como resolver exercícios e simulados. (Testes Práticos)',
+        'Opto por períodos focados, seguidos por pausas curtas.',
+        'Prefiro criar representações visuais para facilitar a compreensão.',
+        'Vario entre disciplinas para manter a mente engajada.',
+        'Realizo práticas como resolver exercícios e simulados.',
       ],
     },
     {
       'questionText': 'Como você lida com a assimilação de novos conceitos?',
       'answers': [
-        'Utilizo intervalos de foco intenso intercalados com descanso. (Método Pomodoro)',
-        'Construo conexões visuais e mentais com mapas conceituais. (Mapa Mental)',
-        'Alternância entre diferentes disciplinas para manter o interesse. (Estudo Intercalado)',
-        'Reforço o aprendizado por meio de testes práticos. (Testes Práticos)',
+        'Utilizo intervalos de foco intenso intercalados com descanso.',
+        'Construo conexões visuais e mentais com mapas conceituais.',
+        'Alternância entre diferentes disciplinas para manter o interesse.)',
+        'Reforço o aprendizado por meio de testes práticos.',
+      ],
+    },
+    {
+      'questionText':
+          'Como você lida com os momentos de pausa durante o estudo?',
+      'answers': [
+        'Aproveito cada pausa para descansar completamente.',
+        'Utilizo as pausas para revisar mentalmente o que foi estudado.',
+        'Faço pausas curtas, mas utilizo para mudar o foco para outra matéria.',
+        'Durante as pausas, resolvo pequenos exercícios relacionados ao estudo.',
+      ],
+    },
+    {
+      'questionText':
+          'Como você se organiza para manter o foco total durante os períodos de estudo?',
+      'answers': [
+        'Utilizo aplicativos ou extensões para cronometrar meus períodos de estudo.',
+        'Prefiro organizar visualmente as informações com diagramas.',
+        'Alternância entre disciplinas é suficiente para manter meu foco.',
+        'Resolvo exercícios práticos como parte da minha estratégia de foco.',
+      ],
+    },
+    {
+      'questionText':
+          'Como você avalia a eficácia do seu método de estudo atual?',
+      'answers': [
+        'Baseio minha avaliação na produtividade durante os períodos de estudo.',
+        'Considero a facilidade de visualização e entendimento das informações.',
+        'Acredito que a alternância entre matérias tem impacto positivo.',
+        'Avalio meu conhecimento por meio da resolução constante de testes práticos.',
       ],
     },
     {
       'questionText':
           'Qual estratégia você acha mais eficaz para avaliar seu conhecimento?',
       'answers': [
-        'Avalio meu progresso com períodos cronometrados. (Método Pomodoro)',
-        'Utilizo mapas mentais como uma ferramenta de revisão visual. (Mapa Mental)',
-        'Vario entre disciplinas para uma abordagem mais completa. (Estudo Intercalado)',
-        'Faço testes práticos e simulados para avaliar minha compreensão. (Testes Práticos)',
+        'Avalio meu progresso com períodos cronometrados.',
+        'Utilizo mapas mentais como uma ferramenta de revisão visual.',
+        'Vario entre disciplinas para uma abordagem mais completa.',
+        'Faço testes práticos e simulados para avaliar minha compreensão.',
       ],
-    }
+    },
   ];
 
   Future<void> saveUserPreferences() async {
@@ -106,37 +136,57 @@ class _QuizScreenState extends State<QuizScreen> {
 
   String calculateRecommendedMethodology() {
     Map<String, String> methodologyKeywords = {
-      'Divido meu tempo em ciclos concentrados com pausas regulares. (Método Pomodoro)':
+      'Divido meu tempo em ciclos concentrados com pausas regulares.':
           'Pomodoro',
-      'Crio esquemas visuais para compreender melhor o conteúdo. (Mapa Mental)':
+      'Crio esquemas visuais para compreender melhor o conteúdo.':
           'Mapa Mental',
-      'Intercalei o estudo entre diferentes matérias para evitar monotonia. (Estudo Intercalado)':
+      'Intercalei o estudo entre diferentes matérias para evitar monotonia.':
           'Estudo Intercalado',
-      'Faço testes práticos e reviso com base em resultados. (Testes Práticos)':
+      'Faço testes práticos e reviso com base em resultados.':
           'Testes Práticos',
-      'Opto por períodos focados, seguidos por pausas curtas. (Método Pomodoro)':
-          'Pomodoro',
-      'Prefiro criar representações visuais para facilitar a compreensão. (Mapa Mental)':
+      'Opto por períodos focados, seguidos por pausas curtas.': 'Pomodoro',
+      'Prefiro criar representações visuais para facilitar a compreensão.':
           'Mapa Mental',
-      'Vario entre disciplinas para manter a mente engajada. (Estudo Intercalado)':
+      'Vario entre disciplinas para manter a mente engajada.':
           'Estudo Intercalado',
-      'Realizo práticas como resolver exercícios e simulados. (Testes Práticos)':
+      'Realizo práticas como resolver exercícios e simulados.':
           'Testes Práticos',
-      'Utilizo intervalos de foco intenso intercalados com descanso. (Método Pomodoro)':
+      'Utilizo intervalos de foco intenso intercalados com descanso.':
           'Pomodoro',
-      'Construo conexões visuais e mentais com mapas conceituais. (Mapa Mental)':
+      'Construo conexões visuais e mentais com mapas conceituais.':
           'Mapa Mental',
-      'Alternância entre diferentes disciplinas para manter o interesse. (Estudo Intercalado)':
+      'Alternância entre diferentes disciplinas para manter o interesse.':
           'Estudo Intercalado',
-      'Reforço o aprendizado por meio de testes práticos. (Testes Práticos)':
+      'Reforço o aprendizado por meio de testes práticos.': 'Testes Práticos',
+      'Aproveito cada pausa para descansar completamente.': 'Pomodoro',
+      'Utilizo as pausas para revisar mentalmente o que foi estudado.':
+          'Mapa Mental',
+      'Faço pausas curtas, mas utilizo para mudar o foco para outra matéria.':
+          'Estudo Intercalado',
+      'Durante as pausas, resolvo pequenos exercícios relacionados ao estudo.':
           'Testes Práticos',
-      'Avalio meu progresso com períodos cronometrados. (Método Pomodoro)':
+      'Utilizo aplicativos ou extensões para cronometrar meus períodos de estudo.':
           'Pomodoro',
-      'Utilizo mapas mentais como uma ferramenta de revisão visual. (Mapa Mental)':
+      'Prefiro organizar visualmente as informações com diagramas.':
           'Mapa Mental',
-      'Vario entre disciplinas para uma abordagem mais completa. (Estudo Intercalado)':
+      'Alternância entre disciplinas é suficiente para manter meu foco.':
           'Estudo Intercalado',
-      'Faço testes práticos e simulados para avaliar minha compreensão. (Testes Práticos)':
+      'Resolvo exercícios práticos como parte da minha estratégia de foco.':
+          'Testes Práticos',
+      'Baseio minha avaliação na produtividade durante os períodos de estudo.':
+          'Pomodoro',
+      'Considero a facilidade de visualização e entendimento das informações.':
+          'Mapa Mental',
+      'Acredito que a alternância entre matérias tem impacto positivo.':
+          'Estudo Intercalado',
+      'Avalio meu conhecimento por meio da resolução constante de testes práticos.':
+          'Testes Práticos',
+      'Avalio meu progresso com períodos cronometrados.': 'Pomodoro',
+      'Utilizo mapas mentais como uma ferramenta de revisão visual.':
+          'Mapa Mental',
+      'Vario entre disciplinas para uma abordagem mais completa.':
+          'Estudo Intercalado',
+      'Faço testes práticos e simulados para avaliar minha compreensão.':
           'Testes Práticos',
     };
 
@@ -162,13 +212,23 @@ class _QuizScreenState extends State<QuizScreen> {
     List<String> recommendedMethodologies =
         scores.keys.where((key) => scores[key] == maxScore).toList();
 
-    print('Scores: $scores');
-    print('Max Score: $maxScore');
-    print('Recommended Methodologies: $recommendedMethodologies');
+    // Verifica se há um empate
+    if (recommendedMethodologies.length == 1) {
+      return recommendedMethodologies.first;
+    } else {
+      // Em caso de empate, escolhe a estratégia com pontuação mais alta
+      String highestScoringMethodology =
+          recommendedMethodologies.reduce((a, b) => scores[a]! > scores[b]!
+              ? a
+              : scores[a] == scores[b]
+                  ? a
+                  : b);
 
-    return recommendedMethodologies.length == 1
-        ? recommendedMethodologies.first
-        : 'Indeciso';
+      print('Scores: $scores');
+      print('Highest Scoring Methodology: $highestScoringMethodology');
+
+      return highestScoringMethodology;
+    }
   }
 
   String getMethodologyDescription(String methodology) {
