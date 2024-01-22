@@ -40,12 +40,29 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
 
+    // Ordenar cada lista de tarefas com base na data e hora de entrega
+    highPriorityTasks.sort((a, b) => _compareDateTime(a, b));
+    mediumPriorityTasks.sort((a, b) => _compareDateTime(a, b));
+    lowPriorityTasks.sort((a, b) => _compareDateTime(a, b));
+
+    // Combinar listas ordenadas em uma única lista de tarefas
     setState(() {
       _tasks.clear();
       _tasks.addAll(highPriorityTasks);
       _tasks.addAll(mediumPriorityTasks);
       _tasks.addAll(lowPriorityTasks);
     });
+  }
+
+  int _compareDateTime(Task a, Task b) {
+    // Comparar primeiro pela data de entrega
+    int dateComparison = a.dueDate.compareTo(b.dueDate);
+    if (dateComparison != 0) {
+      return dateComparison;
+    }
+
+    // Se as datas são iguais, comparar pela hora de entrega
+    return a.dueTime.compareTo(b.dueTime);
   }
 
   Future<void> _deleteTask(int taskId) async {
